@@ -14,6 +14,7 @@ struct ContentView: View {
     @StateObject private var navigationState = MainContentNavigationState()
     @State private var selectedTab: Int = 0
     @State private var showSettings = false
+    @State private var detailMediaItem: MediaItem?
     @State private var librarySelectedWallpaper: Wallpaper?
     @State private var librarySelectedMedia: MediaItem?
     @State private var librarySelectedAnime: AnimeSearchResult?
@@ -46,6 +47,28 @@ struct ContentView: View {
         .sheet(isPresented: $showSettings) {
             SettingsView(viewModel: SettingsViewModel())
                 .environmentObject(WorkshopSourceManager.shared)
+        }
+        .sheet(item: $detailMediaItem) { item in
+            MediaDetailSheet(
+                item: item,
+                viewModel: mediaViewModel,
+                contextItems: nil,
+                onClose: { detailMediaItem = nil },
+                onNavigateToItem: { selected in
+                    detailMediaItem = selected
+                }
+            )
+            .frame(minWidth: 600, minHeight: 400)
+        }
+        .onChange(of: navigationState.selectedMedia) { _, item in
+            guard let item else { return }
+            detailMediaItem = item
+            navigationState.selectedMedia = nil
+        }
+        .onChange(of: librarySelectedMedia) { _, item in
+            guard let item else { return }
+            detailMediaItem = item
+            librarySelectedMedia = nil
         }
         .environmentObject(WorkshopSourceManager.shared)
     }
