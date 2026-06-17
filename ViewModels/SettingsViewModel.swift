@@ -41,4 +41,6 @@ class SettingsViewModel: ObservableObject {
         proxyHost = d.string(forKey: "proxy_host") ?? ""
         proxyPort = d.string(forKey: "proxy_port") ?? ""
     }
+
+    func restoreSavedSettings() {}
 }
