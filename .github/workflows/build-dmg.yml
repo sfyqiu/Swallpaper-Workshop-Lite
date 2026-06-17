@@ -38,9 +38,15 @@ jobs:
         run: |
           hdiutil create -volname "SwallpaperWorkshopLite" -srcfolder build/SwallpaperWorkshopLite.app \
             -ov -format UDZO build/SwallpaperWorkshopLite.dmg
-      - name: Release
+      - name: Read Version
+        id: version
+        run: |
+          V=$(cat VERSION | tr -d '[:space:]')
+          echo "version=$V" >> $GITHUB_OUTPUT
+          echo "tag=v$V" >> $GITHUB_OUTPUT
+      - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v$(cat VERSION)
-          name: Swallpaper Workshop Lite v$(cat VERSION)
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Swallpaper Workshop Lite ${{ steps.version.outputs.version }}
           files: build/SwallpaperWorkshopLite.dmg
