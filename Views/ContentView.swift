@@ -4,8 +4,6 @@ import AppKit
 @MainActor
 final class MainContentNavigationState: ObservableObject {
     @Published var selectedMedia: MediaItem?
-    @Published var librarySelectedMedia: MediaItem?
-    @Published var libraryMediaContext: [MediaItem] = []
     func binding<Value>(for keyPath: ReferenceWritableKeyPath<MainContentNavigationState, Value>) -> Binding<Value> {
         Binding(get: { self[keyPath: keyPath] }, set: { self[keyPath: keyPath] = $0 })
     }
@@ -17,6 +15,7 @@ struct ContentView: View {
     @State private var selectedTab: Int = 0
     @State private var showSettings = false
     @State private var librarySelectedWallpaper: Wallpaper?
+    @State private var librarySelectedMedia: MediaItem?
     @State private var librarySelectedAnime: AnimeSearchResult?
     @State private var libraryWallpaperContext: [Wallpaper] = []
     @State private var libraryMediaContext: [MediaItem] = []
